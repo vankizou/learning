@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
  * @create: 2021-08-04 20:10
  **/
 public class WaitNotify {
-    private static LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<>();
+    private static final LinkedBlockingQueue<String> QUEUE = new LinkedBlockingQueue<>();
 
     public static void main(String[] args) {
         new Consumer().start();
@@ -22,14 +22,14 @@ public class WaitNotify {
         @Override
         public void run() {
             try {
-                synchronized (queue) {
+                synchronized (QUEUE) {
                     while (true) {
-                        if (queue.size() <= 0) {
-                            queue.wait();
+                        if (QUEUE.size() <= 0) {
+                            QUEUE.wait();
                         }
-                        System.out.println("消费数据：" + queue.poll());
+                        System.out.println("消费数据：" + QUEUE.poll());
                         TimeUnit.SECONDS.sleep(1);
-                        queue.notifyAll();
+                        QUEUE.notifyAll();
                     }
                 }
             } catch (InterruptedException e) {
@@ -42,17 +42,17 @@ public class WaitNotify {
         @Override
         public void run() {
             try {
-                synchronized (queue) {
+                synchronized (QUEUE) {
                     int count = 0;
                     while (true) {
-                        if (queue.size() > 1) {
-                            queue.wait();
+                        if (QUEUE.size() > 1) {
+                            QUEUE.wait();
                         }
                         String data = Thread.currentThread().toString() + ": " + count++;
                         System.out.println("生产数据：" + data);
-                        queue.put(data);
+                        QUEUE.put(data);
                         TimeUnit.SECONDS.sleep(1);
-                        queue.notifyAll();
+                        QUEUE.notifyAll();
                     }
                 }
             } catch (InterruptedException e) {

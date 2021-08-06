@@ -12,13 +12,13 @@ import java.util.concurrent.RecursiveTask;
  * @create: 2021-08-06 14:19
  **/
 public class ForkJoinCase {
-    private static final Random random = new Random();
+    private static final Random RANDOM = new Random();
 
     public static void main(String[] args) {
         long[] arr = new long[1000000];
         long expectSum = 0;
         for (int i = 0, len = arr.length; i < len; i++) {
-            arr[i] = random.nextInt(100000);
+            arr[i] = RANDOM.nextInt(100000);
             expectSum += arr[i];
         }
         System.out.println("期望值：" + expectSum);

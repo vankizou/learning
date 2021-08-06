@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * @create: 2021-08-06 21:14
  **/
 public class CyclicBarrierCase {
-    private static final CyclicBarrier cyclicBarrier = new CyclicBarrier(3, new Runnable() {
+    private static final CyclicBarrier CYCLIC_BARRIER = new CyclicBarrier(3, new Runnable() {
         @Override
         public void run() {
             System.out.println("所有分步都执行完了，我就出来冒个泡~");
@@ -25,9 +25,9 @@ public class CyclicBarrierCase {
 
     public static void main(String[] args) {
         // 线程数必须与CyclicBarrier的parties保持一致
-        new UserThread(cyclicBarrier).start();
-        new UserThread(cyclicBarrier).start();
-        new UserThread(cyclicBarrier).start();
+        new UserThread(CYCLIC_BARRIER).start();
+        new UserThread(CYCLIC_BARRIER).start();
+        new UserThread(CYCLIC_BARRIER).start();
     }
 
     static class UserThread extends Thread {

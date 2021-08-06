@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  **/
 public class CountDownLatchCase {
     // 10个要处理的业务
-    private static final CountDownLatch cdl = new CountDownLatch(10);
+    private static final CountDownLatch CDL = new CountDownLatch(10);
 
     public static void main(String[] args) throws InterruptedException {
         // 线程数与 CDL count数无必然关系
@@ -25,7 +25,7 @@ public class CountDownLatchCase {
         new UserThread().start();
         new UserThread().start();
 
-        cdl.await();
+        CDL.await();
         System.out.println("所有事儿都处理完了，很棒！");
     }
 
@@ -35,13 +35,13 @@ public class CountDownLatchCase {
             try {
                 // 业务1处理
                 TimeUnit.SECONDS.sleep(1);
-                System.out.println(String.format("处理完【%s】业务111~~ cdl count: %s", currentThread(), cdl.getCount()));
-                cdl.countDown();    // 完成业务，计数 -1
+                System.out.println(String.format("处理完【%s】业务111~~ cdl count: %s", currentThread(), CDL.getCount()));
+                CDL.countDown();    // 完成业务，计数 -1
 
                 // 业务2处理
                 TimeUnit.SECONDS.sleep(1);
-                System.out.println(String.format("处理完【%s】业务222~~ cdl count: %s", currentThread(), cdl.getCount()));
-                cdl.countDown();    // 完成业务，计数 -1
+                System.out.println(String.format("处理完【%s】业务222~~ cdl count: %s", currentThread(), CDL.getCount()));
+                CDL.countDown();    // 完成业务，计数 -1
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
