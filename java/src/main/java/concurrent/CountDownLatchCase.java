@@ -4,6 +4,12 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * CDL分流聚合
+ * <p>
+ * thread1: ---------结束     |    ↓↓
+ * thread2: --------------结束| -> 分业务全部完成，开始后续业务
+ * thread3: ----结束          |    ↑↑
+ *
  * @author: ZOUFANQI
  * @create: 2021-08-06 10:22
  **/
@@ -23,7 +29,7 @@ public class CountDownLatchCase {
         System.out.println("所有事儿都处理完了，很棒！");
     }
 
-    static class UserThread extends Thread {
+    private static class UserThread extends Thread {
         @Override
         public void run() {
             try {

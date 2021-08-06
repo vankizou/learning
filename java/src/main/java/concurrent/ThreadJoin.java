@@ -11,11 +11,26 @@ import java.util.concurrent.TimeUnit;
 public class ThreadJoin {
 
     public static void main(String[] args) throws InterruptedException {
-        for (int i = 0; i < 10; i++) {
-            UserThread thread = new UserThread("thread" + i);
-            thread.start();
-            thread.join();
-        }
+        UserThread t1 = new UserThread("thread1");
+        UserThread t2 = new UserThread("thread2");
+        UserThread t3 = new UserThread("thread3");
+        UserThread t4 = new UserThread("thread4");
+        UserThread t5 = new UserThread("thread5");
+
+        // 指定顺序 5 -> 4 -> 无序
+
+        // 等t5跑完
+        t5.start();
+        t5.join();
+
+        // 等t4跑完
+        t4.start();
+        t4.join();
+
+        // 无序
+        t3.start();
+        t2.start();
+        t1.start();
     }
 
     private static class UserThread extends Thread {

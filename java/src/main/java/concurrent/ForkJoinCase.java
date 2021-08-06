@@ -32,46 +32,47 @@ public class ForkJoinCase {
         long e = System.currentTimeMillis();
         System.out.println(String.format("fork/join计算值：%s, time: %sms", result, (e - s)));
     }
-}
 
-class SumTask extends RecursiveTask<Long> {
-    private static final int THRESHOLD = 500;   // 任务细化阈值，超过该值任务做拆分
-    private final long[] arr;
-    private final int start;
-    private final int end;
+    private static class SumTask extends RecursiveTask<Long> {
+        private static final int THRESHOLD = 500;   // 任务细化阈值，超过该值任务做拆分
+        private final long[] arr;
+        private final int start;
+        private final int end;
 
-    public SumTask(long[] arr, int start, int end) {
-        this.arr = arr;
-        this.start = start;
-        this.end = end;
-    }
-
-    @Override
-    protected Long compute() {
-        if (this.end - this.start <= THRESHOLD) {
-            /**
-             * 在阈值内，做计算
-             */
-            long sum = 0;
-            for (int i = this.start; i < this.end; i++) {
-                sum += this.arr[i];
-            }
-            return sum;
+        public SumTask(long[] arr, int start, int end) {
+            this.arr = arr;
+            this.start = start;
+            this.end = end;
         }
 
-        /**
-         * 超出阈值，做任务拆分
-         */
-        int mid = (this.end + this.start) / 2;
-        SumTask task1 = new SumTask(this.arr, this.start, mid);
-        SumTask task2 = new SumTask(this.arr, mid, this.end);
-        // 任务拆分
-        invokeAll(task1, task2);
+        @Override
+        protected Long compute() {
+            if (this.end - this.start <= THRESHOLD) {
+                /**
+                 * 在阈值内，做计算
+                 */
+                long sum = 0;
+                for (int i = this.start; i < this.end; i++) {
+                    sum += this.arr[i];
+                }
+                return sum;
+            }
 
-        // 等待任务向上抛结果
-        Long result1 = task1.join();
-        Long result2 = task2.join();
+            /**
+             * 超出阈值，做任务拆分
+             */
+            int mid = (this.end + this.start) / 2;
+            SumTask task1 = new SumTask(this.arr, this.start, mid);
+            SumTask task2 = new SumTask(this.arr, mid, this.end);
+            // 任务拆分
+            invokeAll(task1, task2);
 
-        return result1 + result2;
+            // 等待任务向上抛结果
+            Long result1 = task1.join();
+            Long result2 = task2.join();
+
+            return result1 + result2;
+        }
     }
+
 }
