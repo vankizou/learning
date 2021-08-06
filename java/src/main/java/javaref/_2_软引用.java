@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * GC如果内存够，软件引用不会被回收，如果内存不够，则会被回收
+ *
  * @author: ZOUFANQI
  * @create: 2021-08-04 13:55
  **/
