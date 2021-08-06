@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
  * @author: ZOUFANQI
  * @create: 2021-08-06 10:22
  **/
-public class CountDownLatchTest {
+public class CountDownLatchCase {
     // 10个要处理的业务
     private static final CountDownLatch cdl = new CountDownLatch(10);
 

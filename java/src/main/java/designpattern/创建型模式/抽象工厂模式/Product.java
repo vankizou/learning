@@ -1,4 +1,4 @@
-package designpattern.创建型模式.工厂3_抽象工厂模式;
+package designpattern.创建型模式.抽象工厂模式;
 
 /**
  * @author: ZOUFANQI
