@@ -14,7 +14,7 @@ public class WaitNotify {
 
     public static void main(String[] args) {
         new Consumer().start();
-        new Producer().start();
+        new Consumer().start();
         new Producer().start();
     }
 
@@ -24,7 +24,7 @@ public class WaitNotify {
             try {
                 synchronized (QUEUE) {
                     while (true) {
-                        if (QUEUE.size() <= 0) {
+                        while (QUEUE.size() <= 0) {
                             QUEUE.wait();
                         }
                         System.out.println("消费数据：" + QUEUE.poll());
