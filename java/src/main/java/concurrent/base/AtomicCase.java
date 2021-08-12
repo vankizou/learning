@@ -1,4 +1,4 @@
-package concurrent;
+package concurrent.base;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;

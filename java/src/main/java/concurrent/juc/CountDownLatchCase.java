@@ -1,4 +1,4 @@
-package concurrent;
+package concurrent.juc;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;

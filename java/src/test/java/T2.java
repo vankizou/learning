@@ -1,4 +1,7 @@
-import java.util.concurrent.Semaphore;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author: ZOUFANQI
@@ -6,24 +9,16 @@ import java.util.concurrent.Semaphore;
  **/
 public class T2 {
     public static void main(String[] args) throws InterruptedException {
-        Semaphore semaphore = new Semaphore(2);
-        System.out.println(semaphore.availablePermits());
-        semaphore.release();
-        semaphore.release();
-        semaphore.release();
-        semaphore.release();
-        System.out.println(semaphore.availablePermits());
-        semaphore.acquire();
-        semaphore.acquire();
-        semaphore.acquire();
-        semaphore.acquire();
-        semaphore.acquire();
-        System.out.println(semaphore.availablePermits());
-        semaphore.acquire();
-        System.out.println(semaphore.availablePermits());
-        semaphore.acquire();
-        System.out.println(semaphore.availablePermits());
-        semaphore.acquire();
-        System.out.println(semaphore.availablePermits());
+        Map<User, String> map = new ConcurrentHashMap<>();
+        map.put(new User(), "123");
+        map.put(null, "null");
+        System.out.println(map);
+    }
+
+    static class User {
+        @Override
+        public int hashCode() {
+            return 0;
+        }
     }
 }
