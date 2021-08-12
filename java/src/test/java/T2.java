@@ -9,13 +9,26 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  **/
 public class T2 {
     public static void main(String[] args) throws InterruptedException {
-        Map<User, String> map = new ConcurrentHashMap<>();
-        map.put(new User(), "123");
-        map.put(null, "null");
-        System.out.println(map);
+//        Map<User, String> map = new ConcurrentHashMap<>();
+//        map.put(new User(), "123");
+//        map.put(null, "null");
+//        System.out.println(map);
+
+        new T2().a();
+    }
+
+    private void a() {
+        System.out.println(new User().hashCode());
+        new User.User2().a();
     }
 
     static class User {
+         static class User2 {
+            public void a() {
+                System.out.println("xxxxx");
+            }
+        }
+
         @Override
         public int hashCode() {
             return 0;
