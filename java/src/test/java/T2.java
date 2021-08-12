@@ -14,7 +14,7 @@ public class T2 {
 //        map.put(null, "null");
 //        System.out.println(map);
 
-        new T2().a();
+        System.out.println(Runtime.getRuntime().availableProcessors());
     }
 
     private void a() {

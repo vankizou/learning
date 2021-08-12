@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  **/
 public class ThreadPoolCase {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException, TimeoutException {
         ThreadPoolExecutor threadPool = new ThreadPoolExecutor(
                 1,      // 核心线程数，提交的任务会优先创建，直到核心数满再将数据放到队列中
                 2,  // 最大线程数，当队列数据满了后会开启新线程，数量最多到最大线程数
@@ -41,16 +41,16 @@ public class ThreadPoolCase {
         };
 
         // corePoolSize范围内
-        threadPool.execute(new UserThread("1"));
+        Future<String> user1Future = threadPool.submit(new UserThreadCallable("1"));
 
         // 会开新work
-        threadPool.execute(new UserThread("2"));
+        Future<String> user2Future = threadPool.submit(new UserThreadCallable("2"));
 
         // 超出work，入队列
-        threadPool.execute(new UserThread("3"));
+        Future<String> user3Future = threadPool.submit(new UserThreadCallable("3"));
 
         // 超出队列，走拒绝策略
-        threadPool.execute(new UserThread("4"));
+        Future<String> user4Future = threadPool.submit(new UserThreadCallable("4"));
 
         // 发出关闭请求后，任务3在队列中还未执行，但会等到任务3执行完成后再关闭
         threadPool.shutdown();
@@ -58,20 +58,26 @@ public class ThreadPoolCase {
         System.out.println("阻塞队列中的任务数：" + threadPool.getQueue().size());
 
         // 线程池已关闭，走拒绝策略
-        threadPool.execute(new UserThread("4"));
+        Future<String> user5Future = threadPool.submit(new UserThreadCallable("5"));
 
+        System.out.println("=== return【user1】: " + user1Future.get());
+        System.out.println("=== return【user2】: " + user2Future.get());
+        System.out.println("=== return【user3】: " + user3Future.get());
 
+        // 被拒绝的任务，这里监测不到，会一直阻塞，直到超时
+        System.out.println("=== return【user4】: " + user4Future.get(5, TimeUnit.SECONDS));
+        System.out.println("=== return【user5】: " + user5Future.get(5, TimeUnit.SECONDS));
     }
 
-    private static class UserThread implements Runnable {
+    private static class UserThreadCallable implements Callable<String> {
         final private String name;
 
-        UserThread(String name) {
+        UserThreadCallable(String name) {
             this.name = name;
         }
 
         @Override
-        public void run() {
+        public String call() throws Exception {
             System.out.println("-----start: " + this.name + ", 线程是否中断：" + Thread.currentThread().isInterrupted());
             try {
                 Thread.sleep(3000);
@@ -79,11 +85,12 @@ public class ThreadPoolCase {
                 e.printStackTrace();
             }
             System.out.println("-----end: " + this.name + ", 线程是否中断：" + Thread.currentThread().isInterrupted());
+            return this.toString() + " -- 完成！";
         }
 
         @Override
         public String toString() {
-            return "业务：" + name;
+            return "Runnable业务：" + name;
         }
     }
 
