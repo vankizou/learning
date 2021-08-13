@@ -1,27 +1,23 @@
 package designpattern.创建型模式._1_单例模式;
 
 /**
- * 懒汉式
+ * 【推荐】
+ * 懒汉式（延迟初始化占位类模式）
  *
  * @author: ZOUFANQI
- * @create: 2021-08-04 17:42
+ * @create: 2021-08-13 10:20
  **/
 public class SingletonLazy {
-    private static SingletonLazy instance = null;
-
     private SingletonLazy() {
-
+        System.out.println("类初始化完成！");
     }
 
-    /**
-     * 会频繁加锁
-     *
-     * @return
-     */
-    public static synchronized SingletonLazy getInstance() {
-        if (instance == null) {
-            instance = new SingletonLazy();
-        }
-        return instance;
+    public static SingletonLazy getInstance() {
+        return InstanceHolder.instance;
     }
+
+    private static class InstanceHolder {
+        private static SingletonLazy instance = new SingletonLazy();
+    }
+
 }
