@@ -1,7 +1,7 @@
 package designpattern.创建型模式._1_单例模式;
 
 /**
- * 【推荐】
+ * 【✭推荐】
  * 懒汉式（延迟初始化占位类模式）
  *
  * @author: ZOUFANQI
