@@ -83,16 +83,16 @@ public class ThreadLocalMemoryLeak {
 //[GC (Allocation Failure) [PSYoungGen: 0K->0K(2560K)] 5497K->5497K(9728K), 0.0009247 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
 //[Full GC (Allocation Failure) [PSYoungGen: 0K->0K(2560K)] [ParOldGen: 5497K->5479K(7168K)] 5497K->5479K(9728K), [Metaspace: 3077K->3077K(1056768K)], 0.0036259 secs] [Times: user=0.01 sys=0.00, real=0.01 secs]
 //        Heap
-//        PSYoungGen      total 2560K, used 135K [0x00000007bfd00000, 0x00000007c0000000, 0x00000007c0000000)
-//        eden space 2048K, 6% used [0x00000007bfd00000,0x00000007bfd21d58,0x00000007bff00000)
-//        from space 512K, 0% used [0x00000007bff80000,0x00000007bff80000,0x00000007c0000000)
-//        to   space 512K, 0% used [0x00000007bff00000,0x00000007bff00000,0x00000007bff80000)
-//        ParOldGen       total 7168K, used 5479K [0x00000007bf600000, 0x00000007bfd00000, 0x00000007bfd00000)
-//        object space 7168K, 76% used [0x00000007bf600000,0x00000007bfb59ce0,0x00000007bfd00000)
-//        Metaspace       used 3119K, capacity 4496K, committed 4864K, reserved 1056768K
-//        class space    used 347K, capacity 388K, committed 512K, reserved 1048576K
+//            PSYoungGen      total 2560K, used 135K [0x00000007bfd00000, 0x00000007c0000000, 0x00000007c0000000)
+//                eden space 2048K, 6% used [0x00000007bfd00000,0x00000007bfd21d58,0x00000007bff00000)
+//                from space 512K, 0% used [0x00000007bff80000,0x00000007bff80000,0x00000007c0000000)
+//                to   space 512K, 0% used [0x00000007bff00000,0x00000007bff00000,0x00000007bff80000)
+//            ParOldGen       total 7168K, used 5479K [0x00000007bf600000, 0x00000007bfd00000, 0x00000007bfd00000)
+//                object space 7168K, 76% used [0x00000007bf600000,0x00000007bfb59ce0,0x00000007bfd00000)
+//            Metaspace       used 3119K, capacity 4496K, committed 4864K, reserved 1056768K
+//                class space    used 347K, capacity 388K, committed 512K, reserved 1048576K
 //        Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
-//        at javaref.ThreadLocalMemoryLeak.main(ThreadLocalMemoryLeak.java:63)
+//            at javaref.ThreadLocalMemoryLeak.main(ThreadLocalMemoryLeak.java:63)
     }
 
 }
