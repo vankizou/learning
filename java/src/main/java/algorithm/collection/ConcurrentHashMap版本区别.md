@@ -8,7 +8,7 @@
 | 扩容 | 单线程resize | 通过ForwardNode，分步扩容（sizeCtl=-1），多线程操作时可一起参与扩容 |
 | 加载因子 | 0.75f | n - (n >>> 2) == 0.75f |
 | 数据迁移方式 | 头插法 | 尾插法 |
-| size() | 计算2次，如果值不变返回结果；如果不一致，锁住所有Segment求和 | baseCount + countCell[]（多线程cas修改baseCount失败会放到该数组中） |
+| size() | 计算2次，如果值不变返回结果；如果不一致，锁住所有Segment求和 | 分片计数：baseCount + countCell[]（多线程cas修改baseCount失败会放到该数组中） |
 | get() | 通过volatile保证数据的弱一致性 | 通过volatile保证数据的弱一致性 |
 | put() | 先Hash，通过Hash的高位（与ConcurrentLevel有关）定位Segment，再锁住该Segment进行put | 先Hash，找到Node，加锁，put |
 | 初始化并行度 | 并行度为Segment数组大小（默认为16，初始化后不可改变） | 无实际用途 |
@@ -28,3 +28,6 @@
 1. 所以为了减少扩容可以根据业务适当的扩大容量以及调整加载因子。
 2. 锁是对头节点加锁，所以可以hash后分组，将有hash冲突的放到同一个组里或队列中，插入数据的时候单线程插入。
 
+## 1.8版本ConcurrentHashMap什么情况下会做扩容
+1. 当put元素达到阈值时做扩容
+2. 当链表转红黑树并且table数组长度<64时尝试做扩容

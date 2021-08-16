@@ -1,7 +1,12 @@
 package concurrent.base;
 
 /**
- * volatile可见性
+ * volatile可见性、有序性
+ *
+ * 实现原理：
+ *  有volatile变量修饰的共享变量进行写操作的时候会使用CPU提供的Lock前缀指令
+ *  - 将当前处理器缓存行的数据写回到系统内存
+ *  - 这个写回内存的操作会使在其他CPU里缓存了该内存地址的数据无效
  *
  * @author: ZOUFANQI
  * @create: 2021-08-09 14:55
