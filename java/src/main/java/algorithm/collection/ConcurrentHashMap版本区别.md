@@ -10,7 +10,7 @@
 | 数据迁移方式 | 头插法 | 尾插法 |
 | size() | 计算2次，如果值不变返回结果；如果不一致，锁住所有Segment求和 | 分片计数：baseCount + countCell[]（多线程cas修改baseCount失败会放到该数组中） |
 | get() | 通过volatile保证数据的弱一致性 | 通过volatile保证数据的弱一致性 |
-| put() | 先Hash，通过Hash的高位（与ConcurrentLevel有关）定位Segment，再锁住该Segment进行put | 先Hash，找到Node，加锁，put |
+| put() | 先Hash，通过Hash的高位（与ConcurrentLevel有关）定位Segment，再锁住该Segment进行put | 先Hash，找到Node，加锁，put，当获取到首节点hash=-1时表示在扩容则会协助扩容 |
 | 初始化并行度 | 并行度为Segment数组大小（默认为16，初始化后不可改变） | 无实际用途 |
 
 ## 1.7版本HashMap扩容时产生死锁的问题

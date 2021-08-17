@@ -1,7 +1,5 @@
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author: ZOUFANQI
@@ -9,10 +7,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  **/
 public class T2 {
     public static void main(String[] args) throws InterruptedException {
-//        Map<User, String> map = new ConcurrentHashMap<>();
-//        map.put(new User(), "123");
-//        map.put(null, "null");
-//        System.out.println(map);
+        Map<User, String> map = new ConcurrentHashMap<>();
+        map.put(new User(), "123");
+        map.put(null, "null");
+        System.out.println(map.get(new User()));
+
 
         System.out.println(Runtime.getRuntime().availableProcessors());
     }
@@ -23,15 +22,15 @@ public class T2 {
     }
 
     static class User {
-         static class User2 {
-            public void a() {
-                System.out.println("xxxxx");
-            }
-        }
-
         @Override
         public int hashCode() {
             return 0;
+        }
+
+        static class User2 {
+            public void a() {
+                System.out.println("xxxxx");
+            }
         }
     }
 }
