@@ -69,7 +69,6 @@ public class ByteBufferCompare {
         ByteBuffer buffer_d = ByteBuffer.allocateDirect(2 * time);
         long st_direct = System.currentTimeMillis();
         for (int i = 0; i < time; i++) {
-
             // putChar(char value) 用来写入 char 值的相对 put 方法
             buffer_d.putChar('a');
         }
