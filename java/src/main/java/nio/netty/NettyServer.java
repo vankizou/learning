@@ -35,6 +35,7 @@ public class NettyServer {
                         System.out.println("有客户端连接...");
                         ChannelPipeline ph = channel.pipeline();
                         ph.addLast(new NettyServerHandler());   // 服务端业务逻辑
+                        ph.addLast(new NettyServerHandler2());   // 服务端业务逻辑
                     }
                 });
         try {
