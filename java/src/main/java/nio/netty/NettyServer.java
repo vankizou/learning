@@ -34,7 +34,7 @@ public class NettyServer {
                     protected void initChannel(NioSocketChannel channel) throws Exception {
                         System.out.println("有客户端连接...");
                         ChannelPipeline ph = channel.pipeline();
-                        ph.addLast("handler", new NettyServerHandler());// 服务端业务逻辑
+                        ph.addLast(new NettyServerHandler());   // 服务端业务逻辑
                     }
                 });
         try {
