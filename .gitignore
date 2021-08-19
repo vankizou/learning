@@ -27,4 +27,4 @@ logs/
 /nbdist/
 /.nb-gradle/
 
-~*
+~$*
