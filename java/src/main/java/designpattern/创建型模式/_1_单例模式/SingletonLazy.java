@@ -17,7 +17,7 @@ public class SingletonLazy {
     }
 
     private static class InstanceHolder {
-        private static SingletonLazy instance = new SingletonLazy();
+        private static final SingletonLazy instance = new SingletonLazy();
     }
 
 }
