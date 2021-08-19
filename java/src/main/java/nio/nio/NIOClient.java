@@ -1,10 +1,10 @@
-package netty.nio;
+package nio.nio;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 /**
- * NIO客户端
+ * 基于jdk的NIO客户端
  *
  * @author: ZOUFANQI
  * @create: 2021-08-19 15:26

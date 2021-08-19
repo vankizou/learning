@@ -1,4 +1,4 @@
-package netty.nio;
+package nio.nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

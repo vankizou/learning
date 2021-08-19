@@ -1,4 +1,4 @@
-package netty.nio;
+package nio.nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -11,12 +11,12 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * 服务端
+ * 服务端2（读写）
  *
  * @author: ZOUFANQI
  * @create: 2021-08-19 14:26
  **/
-public class NIOServer {
+public class NIOServerWriter {
     /**
      * 服务启动端口
      */
@@ -114,6 +114,19 @@ public class NIOServer {
                 sc.close();
             }
         }
+
+        if (key.isWritable()) {
+            System.out.println("---- writeable ----");
+            SocketChannel sc = (SocketChannel) key.channel();
+            ByteBuffer att = (ByteBuffer) key.attachment();
+            if (att.hasRemaining()) {
+                int count = sc.write(att);
+                System.out.println("write:" + count + "byte ,hasR:" + att.hasRemaining());
+            } else {
+                // 表示只对读事件感兴趣，其他的事件都注销
+                key.interestOps(SelectionKey.OP_READ);
+            }
+        }
     }
 
     /**
@@ -134,7 +147,7 @@ public class NIOServer {
         // flip操作，切换到读
         writeBuffer.flip();
         // 发送缓冲区的字节数组
-        channel.write(writeBuffer);
+        channel.register(selector, SelectionKey.OP_WRITE | SelectionKey.OP_READ, writeBuffer);
     }
 
     public static void stop() {
