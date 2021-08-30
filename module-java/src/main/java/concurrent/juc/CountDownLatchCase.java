@@ -25,6 +25,8 @@ public class CountDownLatchCase {
         new UserThread().start();
         new UserThread().start();
 
+        new UserThread().start();
+
         CDL.await();
         System.out.println("所有事儿都处理完了，很棒！");
     }
@@ -35,13 +37,13 @@ public class CountDownLatchCase {
             try {
                 // 业务1处理
                 TimeUnit.SECONDS.sleep(1);
-                System.out.println(String.format("处理完【%s】业务111~~ cdl count: %s", currentThread(), CDL.getCount()));
                 CDL.countDown();    // 完成业务，计数 -1
+                System.out.println(String.format("处理完【%s】业务111~~ cdl count: %s", currentThread(), CDL.getCount()));
 
                 // 业务2处理
                 TimeUnit.SECONDS.sleep(1);
-                System.out.println(String.format("处理完【%s】业务222~~ cdl count: %s", currentThread(), CDL.getCount()));
                 CDL.countDown();    // 完成业务，计数 -1
+                System.out.println(String.format("处理完【%s】业务222~~ cdl count: %s", currentThread(), CDL.getCount()));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
