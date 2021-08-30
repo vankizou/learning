@@ -1,0 +1,25 @@
+新版kafka的consumer由kafka自己管理，因此在删除topic时，只需要处理跟topic相关的节点。
+
+0、前置条件:server.properties设置 delete.topic.enable=true
+
+1、如果需要被删除topic 此时正在被程序 produce和consume，则这些生产和消费程序需要停止。
+
+2、使用kafka/bin目录下的命令行工具预删除：
+
+./bin/kafka-topics --delete --zookeeper 【zookeeper server:port】 --topic 【topic name】
+
+这一步执行完之后，节点被标记为删除，并没有物理删除。
+
+3、删除kafka存储目录（server.properties文件log.dirs配置，默认为"/data/kafka-logs"）相关topic的数据目录。
+
+4、 删除zookeeper里的topic信息：
+
+bin/zkCli.sh -server 【zookeeper server:port】
+
+登录到zk shell，然后找到topic所在的目录：ls /brokers/topics，找到要删除的topic，然后执行命令：
+
+rmr /brokers/topics/【topic name】
+
+rmr /admin/delete_topics/【topic name】
+
+5、重启zk和kafka

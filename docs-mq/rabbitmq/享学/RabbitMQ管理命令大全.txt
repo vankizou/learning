@@ -1,0 +1,95 @@
+-------------一般管理命令------------
+管理虚拟主机 
+rabbitmqctl add_vhost [vhost_name] 
+rabbitmqctl delete_vhost [vhost_name] 
+rabbitmqctl list_vhosts 
+
+用户管理
+rabbitmqctl add_user [username] [pwd]
+rabbitmqctl delete_user [username]
+rabbitmqctl  change_password [username] [newpwd]
+
+用户权限
+这个virtual host中所有资源的配置、写、读权限以便管理其中的资源
+rabbitmqctl set_permissions [-p <vhostpath>] <user> <conf> <write> <read>
+
+注意在win上，字符全部使用双引号，linux上使用单引号
+windows上  ：  rabbitmqctl set_permissions -p / king ".*" ".*" ".*"	
+linux上  ：rabbitmqctl set_permissions -p / king '.*' '.*' '.*'
+
+.*是正则表达式，表示全部
+
+rabbitmqctl  set_user_tags  User  Tag
+User为用户名， Tag为角色名(对应于下面的administrator，monitoring，policymaker，management，none)
+赋予其administrator角色
+rabbitmqctl set_user_tags  king  administrator
+
+查看队列
+rabbitmqctl list_queues
+
+查看交换器
+rabbitmqctl list_exchanges
+
+查看绑定
+rabbitmqctl list_bindings
+
+---------------------RabbitMQ集群(所有的节点应该在局域网中)-----------
+1、	修改 /etc/hosts 
+192.168.1.1 node1
+192.168.1.2 node2
+
+2、修改机器名  /etc/hostname
+192.168.1.1的机器  node1
+192.168.1.2的机器  node2
+
+3、Erlang Cookie 文件，不同服务器上的文件内容应该一致，同时权限和所属用户组
+cat /var/lib/rabbitmq/.erlang.cookie
+
+4、node1和node2均要关闭防火墙
+firewall-cmd --permanent --add-port=15672/tcp
+firewall-cmd --permanent --add-port=5672/tcp
+firewall-cmd --permanent --add-port=25672/tcp
+firewall-cmd --permanent --add-port=4369/tcp
+firewall-cmd --reload
+======如果怀疑有端口未打开，使用以下rab命令检查，返回yes表示成功
+firewall-cmd --query-port=4369/tcp
+
+4、在node1、node2上分别运行
+[root@node2 ~]# rabbitmqctl stop_app
+[root@node2 ~]./rabbitmqctl reset
+[root@node2 ~]# rabbitmqctl join_cluster rabbit@node1
+[root@node2 ~]# rabbitmqctl start_app
+
+5、检查集群状态（node1和node2均可）
+rabbitmqctl cluster_status
+
+6、移除集群中的node2
+rabbitmqctl stop_app
+rabbitmqctl reset
+rabbitmqctl start_app
+
+7、加入内存节点
+内存节点则是 rabbitmqctl join_cluster rabbit@node1 --ram
+
+---------------------RabbitMQ镜像队列的配置-----------
+rabbitmqctl set_policy [-p Vhost] Name Pattern Definition [Priority]
+-p Vhost： 可选参数，针对指定vhost下的queue进行设置
+Name: policy的名称
+Pattern: queue的匹配模式(正则表达式)
+Definition：镜像定义，包括三个部分ha-mode, ha-params, ha-sync-mode
+    ha-mode:指明镜像队列的模式，有效值为 all/exactly/nodes
+        all：表示在集群中所有的节点上进行镜像
+        exactly：表示在指定个数的节点上进行镜像，节点的个数由ha-params指定
+        nodes：表示在指定的节点上进行镜像，节点名称通过ha-params指定
+    ha-params：ha-mode模式需要用到的参数
+    ha-sync-mode：进行队列中消息的同步方式，有效值为automatic和manual
+priority：可选参数，policy的优先级
+
+例如，对队列名称以“queue_”开头的所有队列进行镜像，并在集群的两个节点上完成进行，policy的设置命令为：
+rabbitmqctl set_policy ha-queue-two '^queue_' '{"ha-mode":"exactly","ha-params":2,"ha-sync-mode":"automatic"}'
+
+
+
+
+
+
