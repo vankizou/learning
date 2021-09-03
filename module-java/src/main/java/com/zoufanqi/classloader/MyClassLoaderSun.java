@@ -20,14 +20,14 @@ public class MyClassLoaderSun extends MyClassLoaderFather {
             // 获取编译后的class
             String fileName = name.substring(name.lastIndexOf(".") + 1) + ".class";
             // 从class中读取字节数组
-            InputStream is = getClass().getResourceAsStream(fileName);
+            InputStream is = super.getClass().getResourceAsStream(fileName);
             if (is == null) {
                 return super.loadClass(name);
             }
             byte[] b = new byte[is.available()];
             is.read(b);
             // 使用父类的方法将字节数组转换为class
-            return defineClass(name, b, 0, b.length);
+            return super.defineClass(name, b, 0, b.length);
         } catch (IOException e) {
             throw new ClassNotFoundException(name);
         }
