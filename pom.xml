@@ -11,6 +11,7 @@
 
     <modules>
         <module>module-java</module>
+        <module>module-spring</module>
     </modules>
 
 
