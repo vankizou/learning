@@ -5,6 +5,8 @@ import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
 /**
+ * 配置AOP
+ *
  * @author: ZOUFANQI
  * @create: 2021-09-02 17:12
  **/

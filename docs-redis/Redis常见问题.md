@@ -20,3 +20,12 @@
 | REDIS_SET | REDIS_ENCODING_HT | 使用字典实现的集合对象 | |
 | REDIS_ZSET | REDIS_ENCODING_ZIPLIST | 使用压缩列表实现的有序集合对象 | 当长度小于128，并且所有元素的度都小于64bit，否则使用skiplist |
 | REDIS_ZSET | REDIS_ENCODING_SKIPLIST | 使用跳跃表和字典实现的有序集合对象 | |
+
+## 缓存清理策略
+随机清理 + 惰性清除
+
+## 缓存淘汰机制
+1. 抛异常
+2. 删除最早的
+3. 随机删除
+4. LRU（最近最少使用）

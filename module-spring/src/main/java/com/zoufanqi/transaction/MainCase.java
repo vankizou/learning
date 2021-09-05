@@ -1,26 +1,25 @@
-package com.zoufanqi.aop;
+package com.zoufanqi.transaction;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * 主程序
  *
  * @author: ZOUFANQI
- * @create: 2021-09-02 17:14
+ * @create: 2021-09-04 09:14
  **/
-@ComponentScan("com.zoufanqi.aop")
-@EnableAspectJAutoProxy
+@ComponentScan({"com.zoufanqi.transaction"})
 public class MainCase {
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(MainCase.class);
 
         MyService myService = context.getBean(MyService.class);
-        myService.doSomething();
+//        myService.requireExceptionTest1();
+        myService.requireExceptionTest2();
+//        myService.requireNewExceptionTest1();
+//        myService.requireNewExceptionTest2();
 
-        MyService2 myService2 = context.getBean(MyService2.class);
-        myService2.doSomething();
     }
 }

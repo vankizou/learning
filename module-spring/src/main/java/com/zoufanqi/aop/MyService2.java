@@ -1,12 +1,9 @@
 package com.zoufanqi.aop;
 
-import org.springframework.stereotype.Service;
-
 /**
  * @author: ZOUFANQI
  * @create: 2021-09-02 18:02
  **/
-@Service
 public class MyService2 {
 
     public void doSomething() {
