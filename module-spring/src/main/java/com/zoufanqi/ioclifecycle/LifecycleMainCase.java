@@ -7,7 +7,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +20,7 @@ import javax.annotation.PreDestroy;
  * @create: 2021-09-02 17:14
  **/
 @Component("我是这个bean的名称")
-@Scope("prototype")
+//@Scope("prototype")
 public class LifecycleMainCase implements
         BeanNameAware,
         BeanFactoryAware,
