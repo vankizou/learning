@@ -1,4 +1,12 @@
 
+## HashMap优化
+- Hash散列优化
+(key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16)
+hashcode与高位异或同时保持hashcode的高低位特征，降低hash寻址的冲突概率
+
+- Hash寻址优化
+用
+
 ## 1.7与1.8的ConcurrentHashMap对比
 
 | 异同点 | JDK1.7 | JDK1.8 |
