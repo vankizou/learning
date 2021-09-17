@@ -5,7 +5,7 @@
 hashcode与高位异或同时保持hashcode的高低位特征，降低hash寻址的冲突概率
 
 - Hash寻址优化
-用
+不用取模（%）运算，改用 hashcode & (n-1)
 
 ## 1.7与1.8的ConcurrentHashMap对比
 
