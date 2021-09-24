@@ -9,9 +9,11 @@ public class MainCase {
         ObjectStructure os = new ObjectStructure();
         os.add(new ElementImplA());
         os.add(new ElementImplB());
+
         Visitor visitor = new VisitorImplA();
         os.accept(visitor);
         System.out.println("-------------");
+
         visitor = new VisitorImplB();
         os.accept(visitor);
     }
