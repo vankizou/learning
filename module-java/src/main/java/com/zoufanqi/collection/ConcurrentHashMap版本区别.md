@@ -37,5 +37,7 @@ hashcode与高位异或同时保持hashcode的高低位特征，降低hash寻址
 2. 锁是对头节点加锁，所以可以hash后分组，将有hash冲突的放到同一个组里或队列中，插入数据的时候单线程插入。
 
 ## 1.8版本ConcurrentHashMap什么情况下会做扩容
-1. 当put元素达到阈值时做扩容
-2. 当链表转红黑树并且table数组长度<64时尝试做扩容
+1. 当链表元素达到阈值8并且table数组长度<64时尝试做扩容
+2. putVal、clear、compute等方法调用addCount()方法时检测元素个数达到阈值时扩容
+
+https://blog.csdn.net/zzu_seu/article/details/106698150

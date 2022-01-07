@@ -10,7 +10,7 @@
 | type | encoding | 对象 | 条件 |
 | --- | --- | --- | --- |
 | REDIS_STRING | REDIS_ENCODING_INT | 使用整形值实现的字符串对象 | 整型数据 |
-| REDIS_STRING | REDIS_ENCODING_EMBSTR | 使用embstr编码的简单动态字符串实现的字符串对象 | 
+| REDIS_STRING | REDIS_ENCODING_EMBSTR | 使用embstr编码的简单动态字符串实现的字符串对象 | |
 | REDIS_STRING | REDIS_ENCODING_RAW | 使用简单动态字符串实现的字符串对象 | |
 | REDIS_LIST | REDIS_ENCODING_ZIPLIST | 使用压缩列表实现的列表对象 | 列表长度小于512，并且所有元素长度都小于64bit，否则使用linkedlist |
 | REDIS_LIST | REDIS_ENCODING_LINKEDLIST | 使用双端链表的列表对象 | |
