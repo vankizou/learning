@@ -22,9 +22,10 @@ public class MainCase {
      */
     public static void main(String[] args) {
         // 代理实例
-        Subject proxyIns1 = new ProxyHandler().getProxyIns(RealSubject.class);
+//        Subject proxyIns1 = new ProxyHandler().getProxyIns(RealSubject.class);
+//        System.out.println(proxyIns1.request());
+
         RealSubject proxyIns2 = new ProxyHandler().getProxyIns(RealSubject.class);
-        System.out.println(proxyIns1.request());
         System.out.println(proxyIns2.request());
     }
 }
