@@ -28,23 +28,10 @@ import java.util.function.Function;
  * @since 2023/6/7 13:55
  **/
 public abstract class AbstractPersistentLogHandler {
-    public static AmislcOperateLog buildPersistentLog(
-            LogEnvTypeEnum envType,
-            Class<?> targetClazz,
-            LogPersistent logPersistent,
-            Map<String, Object> inputParamMap,
-            Object outputParam
-    ) {
+    public static AmislcOperateLog buildPersistentLog(LogEnvTypeEnum envType, Class<?> targetClazz,
+                                                      LogPersistent logPersistent, Map<String, Object> inputParamMap, Object outputParam) {
         final String clsName = targetClazz.getSimpleName();
-        LogObjTypeEnum matchHandler = null;
-
-        for (LogObjTypeEnum handler : LogObjTypeEnum.values()) {
-            if (handler.getDubboClsMatches().apply(clsName.toUpperCase())) {
-                // 根据类名判断是否为该类型
-                matchHandler = handler;
-                break;
-            }
-        }
+        final LogObjTypeEnum matchHandler = matchObjType(clsName);
         if (Objects.isNull(matchHandler)) {
             return null;
         }
@@ -65,23 +52,7 @@ public abstract class AbstractPersistentLogHandler {
         log.setOperateParam(buildOperateParam(inputParamMap));
 
         // 填充appId（如果有）
-        log.setAppId(NumberUtil.parseInt(Optional.ofNullable(inputParamMap.get("appId")).orElse("0").toString(), 0));
-        // 无直接传递appId参数
-        if (Objects.isNull(log.getAppId()) || log.getAppId() <= 0) {
-            for (Object o : inputParamMap.values()) {
-                final String str = JSON.toJSONString(o);
-                if (!JSONUtil.isTypeJSONObject(str)) {
-                    continue;
-                }
-                // 从参数值中获取appId
-                final Integer appId = JSON.parseObject(str).getInteger("appId");
-                if (Objects.isNull(appId)) {
-                    continue;
-                }
-                log.setAppId(appId);
-                break;
-            }
-        }
+        log.setAppId(getAppId(inputParamMap));
 
         log.setOperateResult(JSON.toJSONString(outputParam));
         log.setOperateStatus(resultSuccess ? 1 : 2);
@@ -132,6 +103,36 @@ public abstract class AbstractPersistentLogHandler {
         return log;
     }
 
+    private static Integer getAppId(Map<String, Object> inputParamMap) {
+        Integer appId = NumberUtil.parseInt(Optional.ofNullable(inputParamMap.get("appId")).orElse("0").toString(), 0);
+        // 无直接传递appId参数
+        if (Objects.isNull(appId) || appId <= 0) {
+            for (Object o : inputParamMap.values()) {
+                final String str = JSON.toJSONString(o);
+                if (!JSONUtil.isTypeJSONObject(str)) {
+                    continue;
+                }
+                // 从参数值中获取appId
+                appId = JSON.parseObject(str).getInteger("appId");
+                if (Objects.isNull(appId)) {
+                    continue;
+                }
+                break;
+            }
+        }
+        return appId;
+    }
+
+    private static LogObjTypeEnum matchObjType(String clsName) {
+        for (LogObjTypeEnum handler : LogObjTypeEnum.values()) {
+            if (handler.getDubboClsMatches().apply(clsName.toUpperCase())) {
+                // 根据类名判断是否为该类型
+                return handler;
+            }
+        }
+        return null;
+    }
+
     private static String buildOperateParam(Map<String, Object> inputParamMap) {
         if (CollectionUtil.isNullOrEmpty(inputParamMap)) {
             return "{}";
@@ -177,3 +178,4 @@ public abstract class AbstractPersistentLogHandler {
     }
 
 }
+
