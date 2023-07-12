@@ -1,7 +1,5 @@
 package com.zoufanqi.util;
 
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
@@ -76,7 +74,7 @@ public class CommonUtil {
     public static List<Field> getAllFields(Class<?> cls) {
         final String key = cls.getName();
         List<Field> fields = BEAN_FIELD_CACHE_MAP.get(key);
-        if (CollectionUtil.isEmpty(fields)) {
+        if (Objects.isNull(fields) || fields.isEmpty()) {
             return fields;
         }
         fields = new ArrayList<>(32);
@@ -94,15 +92,24 @@ public class CommonUtil {
         final Object methodVal = getFieldValByGetter(bean, field);
 
         // 注解值
-        final String annoVal = StrUtil.isBlank(apiModelProperty.value()) ? "" : String.format(" (%s)", apiModelProperty.value());
+        final String annoVal = Objects.isNull(apiModelProperty.value()) ? "" : String.format(" (%s)", apiModelProperty.value().trim());
 
-        // 校验
-        if (methodVal instanceof String) {
-            validateActionIfFailed("".equals(((String) methodVal).trim()), fieldName + annoVal, "不能为空");
-        } else if (methodVal instanceof Collection) {
-            validateActionIfFailed(((Collection<?>) methodVal).isEmpty(), fieldName + annoVal, "不能为空");
-        } else {
-            validateActionIfFailed(Objects.isNull(methodVal), fieldName + annoVal, "不能为空");
+        if (Objects.nonNull(methodVal)) {
+            // 校验有值但是值不符合
+            if (methodVal instanceof String) {
+                validateActionIfFailed("".equals(((String) methodVal).trim()), fieldName + annoVal, "不能为空");
+            } else if (methodVal instanceof Collection) {
+                validateActionIfFailed(((Collection<?>) methodVal).isEmpty(), fieldName + annoVal, "不能为空");
+            }
+        }
+        // 值为空
+        else {
+            final Class<?> type = field.getType();
+            if (Enum.class.isAssignableFrom(type)) {
+                validateActionIfFailed(true, fieldName + annoVal, "不能为空，参考：" + Arrays.asList(field.getType().getEnumConstants()));
+            } else {
+                validateActionIfFailed(true, fieldName + annoVal, "不能为空");
+            }
         }
     }
 
