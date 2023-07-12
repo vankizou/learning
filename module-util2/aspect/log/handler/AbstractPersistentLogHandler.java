@@ -125,7 +125,7 @@ public abstract class AbstractPersistentLogHandler {
 
     private static LogObjTypeEnum matchObjType(String clsName) {
         for (LogObjTypeEnum handler : LogObjTypeEnum.values()) {
-            if (handler.getDubboClsMatches().apply(clsName.toUpperCase())) {
+            if (handler.getInterfaceClsMatches().apply(clsName.toUpperCase())) {
                 // 根据类名判断是否为该类型
                 return handler;
             }
