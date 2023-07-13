@@ -1,11 +1,10 @@
 package com.zmn.biz.amislc.aspect.log;
 
-import com.zmn.biz.amislc.BizAmislcException;
 import com.zmn.biz.amislc.aspect.log.anno.LogPersistent;
-import com.zmn.biz.amislc.aspect.log.anno.LogRegister;
+import com.zmn.biz.amislc.aspect.log.anno.LogPersistentRegister;
+import com.zmn.biz.amislc.aspect.log.builder.AmislcPersistentLogBuilder;
 import com.zmn.biz.amislc.aspect.log.enums.LogEnvTypeEnum;
 import com.zmn.biz.amislc.aspect.log.fn.LogPersistentConsumer;
-import com.zmn.biz.amislc.aspect.log.handler.AbstractPersistentLogHandler;
 import com.zmn.biz.amislc.model.entity.AmislcOperateLog;
 import com.zmn.biz.amislc.services.interfaces.IAmislcOperateLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,7 @@ import java.util.Objects;
 
 
 /**
- * 日志切面，主要处理逻辑：
+ * 日志切面业务处理，主要处理逻辑：
  * 1. 统一对所有DIO字段做校验
  * 2. 统一打印所有Admin/Dubbo接口的出入信息
  * 3. 统一对接口[增删改]操作进行日志持久化（默认处理以[add/modify/delete]开头的方法，也可以添加[@LogPersistent]注解自定义指定）
@@ -28,7 +27,9 @@ import java.util.Objects;
  * @since 2023/7/4 16:24
  **/
 @Slf4j
-public class LogAspect extends BaseLogAspect {
+public abstract class BaseLogAspectService extends BaseLogAspect {
+    private final LogEnvTypeEnum envType;
+
     @Autowired
     private IAmislcOperateLogService operateLogService;
 
@@ -36,29 +37,38 @@ public class LogAspect extends BaseLogAspect {
      * 持久化日志处理逻辑
      */
     private final LogPersistentConsumer persistentLogConsumer = new LogPersistentConsumer() {
+        private final AmislcPersistentLogBuilder logBuilder = new AmislcPersistentLogBuilder();
+
         @Override
-        public void consumePersistentLog(LogEnvTypeEnum envType, LogRegister logRegister, LogPersistent bosLogPersistent, Map<String, Object> inputParamMap, Object outputParam) {
-            final AmislcOperateLog log = AbstractPersistentLogHandler.buildPersistentLog(envType, logRegister, bosLogPersistent, inputParamMap, outputParam);
+        public void consumePersistentLog(
+                LogPersistentRegister logRegister,
+                LogPersistent bosLogPersistent,
+                Map<String, Object> inputParamMap,
+                Object outputResult
+        ) {
+            final AmislcOperateLog log = logBuilder.build(envType, logRegister, bosLogPersistent, inputParamMap, outputResult);
             if (Objects.nonNull(log)) {
                 operateLogService.save(log);
             }
         }
     };
 
-    protected LogAspect(LogEnvTypeEnum envType) {
-        super(envType);
+    protected BaseLogAspectService(LogEnvTypeEnum envType) {
+        this.envType = envType;
     }
 
     public Object doAround(ProceedingJoinPoint point) {
-        return doAround(point, null);
+        return this.doProcess(point, persistentLogConsumer);
     }
 
-    public Object doAround(ProceedingJoinPoint point, String operator) {
-        return this.doProcess(point, persistentLogConsumer, operator);
-    }
+    /**
+     * AOP入口
+     *
+     * @param point 切点
+     * @return 响应
+     * @author zoufanqi
+     * @since 2023/7/13 10:11
+     */
+    public abstract Object around(ProceedingJoinPoint point);
 
-    @Override
-    protected boolean isParamException(Throwable throwable) {
-        return throwable instanceof BizAmislcException || throwable instanceof IllegalArgumentException;
-    }
 }

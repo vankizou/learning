@@ -1,4 +1,4 @@
-package com.zmn.biz.amislc.aspect.log.handler;
+package com.zmn.biz.amislc.aspect.log.fn;
 
 import com.zmn.biz.amislc.aspect.log.anno.LogPersistent;
 import com.zmn.biz.amislc.aspect.log.enums.LogOperateTypeEnum;

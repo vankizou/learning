@@ -9,6 +9,15 @@ import java.lang.annotation.Target;
 
 /**
  * 持久化日志接口注册
+ * <p>
+ * 使用样例：
+ * <p>
+ * \@RestController
+ * \@RequestMapping("/demo")
+ * \@LogRegister(LogObjTypeEnum.DEMO)
+ * public class DemoController {
+ * ...
+ * }
  *
  * @author zoufanqi
  * @version v1.0
@@ -16,7 +25,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LogRegister {
+public @interface LogPersistentRegister {
     /**
      * 日志主体类型
      *
