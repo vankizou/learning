@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.Objects;
 
 /**
- * 需要持久化dubbo接口操作日志的在此扩展枚举
+ * 需要持久化接口操作日志的在此扩展枚举
  *
  * @author zoufanqi
  * @version v1.0
