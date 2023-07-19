@@ -33,7 +33,7 @@ public abstract class BaseLogAspect {
     private final LogPersistent MODIFY_LP = new LogPersistentImpl(LogOperateTypeEnum.UPDATE);
 
     private final LogPersistent DELETE_LP = new LogPersistentImpl(LogOperateTypeEnum.DELETE);
-    
+
     public Object doProcess(ProceedingJoinPoint point, LogPersistentConsumer persistentLogConsumer) {
         // 切入点信息
         final Class<?> targetClazz = point.getTarget().getClass();
@@ -47,7 +47,6 @@ public abstract class BaseLogAspect {
 
         // 方法类型
         final Method targetMethod = ((MethodSignature) signature).getMethod();
-        final Class<?> returnClassType = targetMethod.getReturnType();
 
         final LogPersistent persistentLog = targetMethod.getAnnotation(LogPersistent.class);
 
@@ -73,7 +72,11 @@ public abstract class BaseLogAspect {
             log.info("调用方法{}, 响应: {}", clsMethodName, ignoreOutput ? "***" : JSON.toJSONString(outputResponse));
             return outputResponse;
         } catch (Throwable ex) {
-            log.info("调用方法{}, 异常", clsMethodName, ex);
+            if (this.isBizException(ex)) {
+                log.error("【请求接口异常】调用方法: {}, MSG: {}", clsMethodName, ex.getMessage());
+            } else {
+                log.error("【请求接口异常】调用方法: {}", clsMethodName, ex);
+            }
             // 异常信息转换
             return this.buildResponseIfThrowException(ex);
         } finally {
@@ -126,6 +129,16 @@ public abstract class BaseLogAspect {
     protected abstract Object buildResponseIfThrowException(Throwable ex);
 
     /**
+     * 是否为业务异常
+     *
+     * @param ex 异常
+     * @return t/f
+     * @author zoufanqi
+     * @since 2023/7/19 15:23
+     */
+    protected abstract boolean isBizException(Throwable ex);
+
+    /**
      * 拼接参数
      *
      * @param method 方法
@@ -140,7 +153,7 @@ public abstract class BaseLogAspect {
         }
         // 获取方法的参数名
         final String[] params = DISCOVERER.getParameterNames(method);
-        if (Objects.isNull(params)) {
+        if (Objects.isNull(params) || params.length == 0) {
             return Collections.emptyMap();
         }
 

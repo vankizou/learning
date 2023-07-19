@@ -1,12 +1,13 @@
 package com.zmn.biz.amislc.aspect.log;
 
+import com.zmn.biz.amislc.BizAmislcException;
 import com.zmn.biz.amislc.aspect.log.anno.LogPersistent;
 import com.zmn.biz.amislc.aspect.log.anno.LogPersistentRegister;
 import com.zmn.biz.amislc.aspect.log.builder.AmislcPersistentLogBuilder;
 import com.zmn.biz.amislc.aspect.log.enums.LogEnvTypeEnum;
 import com.zmn.biz.amislc.aspect.log.fn.LogPersistentConsumer;
 import com.zmn.biz.amislc.model.entity.AmislcOperateLog;
-import com.zmn.biz.amislc.services.interfaces.IAmislcOperateLogService;
+import com.zmn.biz.amislc.services.interfaces.log.IAmislcOperateLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,11 @@ public abstract class BaseLogAspectService extends BaseLogAspect {
 
     public Object doAround(ProceedingJoinPoint point) {
         return this.doProcess(point, persistentLogConsumer);
+    }
+
+    @Override
+    protected boolean isBizException(Throwable ex) {
+        return ex instanceof BizAmislcException || ex instanceof IllegalArgumentException;
     }
 
     /**

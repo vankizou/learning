@@ -1,9 +1,7 @@
-package com.zmn.biz.amislc.common.utils;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.util.Asserts;
+package com.zoufanqi.util;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 版本工具类
@@ -14,6 +12,12 @@ import java.util.Arrays;
  **/
 public class VersionUtil {
     private static final String VERSION_PREFIX = "v";
+
+    private static final int MAX_PARTS = 3;
+
+    public static Integer[] splitAndCheckVersionParts(String version) {
+        return splitAndCheckVersionParts(version, MAX_PARTS);
+    }
 
     /**
      * 分隔版本
@@ -26,19 +30,16 @@ public class VersionUtil {
      */
     public static Integer[] splitAndCheckVersionParts(String version, int maxParts) {
         // 前缀校验
-        Asserts.check(
-                StringUtils.isNotBlank(version) || (version = version.trim().toLowerCase()).startsWith(VERSION_PREFIX.toLowerCase()),
-                "应用版本不符合规范：%s，参考：v1%s",
-                version, StringUtils.repeat(".0", maxParts - 1)
-        );
+        if (Objects.isNull(version) || "".equals(version = version.trim()) ||
+                !(version = version.toLowerCase()).startsWith(VERSION_PREFIX.toLowerCase())) {
+            throwExceptionForVersionIllegal(version, maxParts);
+        }
 
         // 样例：v1.0.0，剔掉v
         final String[] parts = version.substring(1).split("\\.");
-        Asserts.check(
-                parts.length <= maxParts,
-                "应用版本不符合规范：%s，参考：v1%s", version,
-                StringUtils.repeat(".0", maxParts - 1)
-        );
+        if (parts.length > maxParts) {
+            throwExceptionForVersionIllegal(version, maxParts);
+        }
 
         // 字符串转数字
         final Integer[] results = new Integer[parts.length];
@@ -47,13 +48,20 @@ public class VersionUtil {
                 results[i] = Integer.parseInt(parts[i]);
             }
         } catch (Exception e) {
-            Asserts.check(
-                    true,
-                    "应用版本不符合规范：%s，参考：v1%s",
-                    version, StringUtils.repeat(".0", maxParts - 1)
-            );
+            throwExceptionForVersionIllegal(version, maxParts);
         }
         return results;
+    }
+
+    private static void throwExceptionForVersionIllegal(String version, int maxParts) {
+        final StringBuilder exampleBuilder = new StringBuilder(4 * maxParts);
+        for (int i = 0; i < maxParts; i++) {
+            exampleBuilder.append(".").append(i + 1);
+        }
+        throw new IllegalArgumentException(String.format(
+                "应用版本不符合规范: %s, 参考: v%s",
+                version, exampleBuilder.substring(1)
+        ));
     }
 
     /**
@@ -72,12 +80,16 @@ public class VersionUtil {
         ).substring(1);
     }
 
+    public static boolean isNewVersionHigher(String baseVersion, String newVersion) {
+        return isNewVersionHigher(baseVersion, newVersion, MAX_PARTS);
+    }
+
     /**
      * 新版本是否更高
      *
      * @param baseVersion 当前稳定版本
-     * @param newVersion        新版本
-     * @param maxParts          最大片段长度
+     * @param newVersion  新版本
+     * @param maxParts    最大片段长度
      * @return 是否合法
      * @author zoufanqi
      * @since 2023/7/6 16:24
