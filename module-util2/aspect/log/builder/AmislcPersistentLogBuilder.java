@@ -114,7 +114,7 @@ public class AmislcPersistentLogBuilder extends BasePersistentLogBuilder<AmislcO
                 }
         );
 
-        // 同一个方法承担添加和修改的双重动作处理
+        // 接口可以是添加或更新（根据ID判断）
         if (logPersistent.value() == LogOperateTypeEnum.INSERT_OR_UPDATE) {
             log.setOperateType(
                     (Objects.nonNull(log.getObjId()) && log.getObjId() > 0 ?

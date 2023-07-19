@@ -1,4 +1,4 @@
-package com.zmn.biz.amislc.common.diobase.validate.anno;
+package com.zmn.biz.amislc.common.basedxo.dio.validate.anno;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

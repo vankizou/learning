@@ -1,4 +1,4 @@
-package com.zmn.biz.amislc.common.diobase.validate.anno;
+package com.zmn.biz.amislc.common.basedxo.dio.validate.anno;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 字符串trim
+ * 检测字符串长度
  *
  * @author zoufanqi
  * @version v1.0
@@ -14,5 +14,8 @@ import java.lang.annotation.Target;
  **/
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DioDoStringTrimmed {
+public @interface DioCheckStringLength {
+    int min() default 0;
+
+    int max() default Integer.MAX_VALUE;
 }

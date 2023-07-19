@@ -1,4 +1,4 @@
-package com.zmn.biz.amislc.common.diobase;
+package com.zmn.biz.amislc.common.basedxo.dio;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,9 +1,16 @@
-package com.zmn.biz.amislc.common.diobase.validate.ext;
+package com.zmn.biz.amislc.common.basedxo.dio.validate.ext;
 
 import io.swagger.annotations.ApiModelProperty;
 
 import java.lang.reflect.Field;
 
+/**
+ * 扩展字段校验
+ *
+ * @author zoufanqi
+ * @version v1.0
+ * @since 2023/7/14 15:45
+ */
 @FunctionalInterface
 public interface ExtValidator {
     /**

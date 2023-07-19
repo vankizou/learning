@@ -1,8 +1,9 @@
-package com.zmn.biz.amislc.common.diobase.validate.ext;
+package com.zmn.biz.amislc.common.basedxo.dio.validate.ext;
 
-import com.zmn.biz.amislc.common.diobase.validate.anno.DioCheckStringLength;
-import com.zmn.biz.amislc.common.diobase.validate.anno.DioCheckStringRegex;
-import com.zmn.biz.amislc.common.diobase.validate.anno.DioDoStringTrimmed;
+import com.zmn.biz.amislc.common.basedxo.dio.validate.DioValidator;
+import com.zmn.biz.amislc.common.basedxo.dio.validate.anno.DioCheckStringLength;
+import com.zmn.biz.amislc.common.basedxo.dio.validate.anno.DioCheckStringRegex;
+import com.zmn.biz.amislc.common.basedxo.dio.validate.anno.DioDoStringTrimmed;
 import com.zmn.biz.amislc.common.utils.CommonUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,9 +16,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.regex.Pattern;
-
-import static com.zmn.biz.amislc.common.diobase.validate.DioValidator.buildFailedFieldName;
-import static com.zmn.biz.amislc.common.diobase.validate.DioValidator.failed;
 
 /**
  * @author zoufanqi
@@ -57,9 +55,9 @@ public enum ExtValidatorEnum {
             (entity, field, fieldVal, propAnno) -> {
                 final DioCheckStringLength anno = field.getAnnotation(DioCheckStringLength.class);
                 final int len = Objects.isNull(fieldVal) ? 0 : String.valueOf(fieldVal).length();
-                failed(
+                DioValidator.failed(
                         len < anno.min() || len > anno.max(),
-                        buildFailedFieldName(field.getName(), propAnno),
+                        DioValidator.buildFailedFieldName(field.getName(), propAnno),
                         String.format("长度限制：[%d,%d]", anno.min(), anno.max())
                 );
                 return null;
@@ -93,7 +91,7 @@ public enum ExtValidatorEnum {
 
                 // 正则匹配
                 if (!pattern.matcher((String) fieldVal).matches()) {
-                    failed(
+                    DioValidator.failed(
                             true,
                             field.getName(),
                             "不符合规范：" + fieldVal +

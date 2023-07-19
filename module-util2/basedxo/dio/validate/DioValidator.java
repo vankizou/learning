@@ -1,6 +1,6 @@
-package com.zmn.biz.amislc.common.diobase.validate;
+package com.zmn.biz.amislc.common.basedxo.dio.validate;
 
-import com.zmn.biz.amislc.common.diobase.validate.ext.ExtValidatorEnum;
+import com.zmn.biz.amislc.common.basedxo.dio.validate.ext.ExtValidatorEnum;
 import com.zmn.biz.amislc.common.utils.CommonUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;

@@ -6,8 +6,8 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zmn.biz.amislc.common.dio.BaseAddDIO;
-import com.zmn.biz.amislc.common.dio.BaseModifyDIO;
+import com.zmn.biz.amislc.common.basedxo.dio.BaseAddDIO;
+import com.zmn.biz.amislc.common.basedxo.dio.BaseModifyDIO;
 import com.zmn.biz.amislc.common.utils.CommonUtil;
 import com.zmn.common.dto2.PageResult;
 import lombok.extern.slf4j.Slf4j;
@@ -99,6 +99,9 @@ public class ServiceUtil {
      * @since 2023/6/6 11:51
      */
     public static <S, T> T copyProperties(S source, T target, BiConsumer<S, T> afterCopyConsumer) {
+        if (Objects.isNull(source) || Objects.isNull(target)) {
+            return target;
+        }
         BeanUtil.copyProperties(source, target, COPY_OPTIONS);
         if (Objects.nonNull(afterCopyConsumer)) {
             afterCopyConsumer.accept(source, target);
@@ -168,8 +171,8 @@ public class ServiceUtil {
      * @author zoufanqi
      * @since 2023/6/6 11:51
      */
-    public static <S, T> List<T> batchCopyProperties(List<S> sources, Class<T> targetCls) {
-        return batchCopyProperties(sources, targetCls, null);
+    public static <S, T> List<T> copyBatchProperties(List<S> sources, Class<T> targetCls) {
+        return copyBatchProperties(sources, targetCls, null);
     }
 
     /**
@@ -182,7 +185,7 @@ public class ServiceUtil {
      * @author zoufanqi
      * @since 2023/6/6 11:51
      */
-    public static <S, T> List<T> batchCopyProperties(List<S> sources, Class<T> targetCls, BiConsumer<S, T> targetConsumer) {
+    public static <S, T> List<T> copyBatchProperties(List<S> sources, Class<T> targetCls, BiConsumer<S, T> targetConsumer) {
         if (CollectionUtil.isEmpty(sources)) {
             return Collections.emptyList();
         }
@@ -239,7 +242,7 @@ public class ServiceUtil {
      * @author zoufanqi
      * @since 2023/7/5 09:49
      */
-    public static <T> T getTopOne(List<T> list) {
+    public static <T> T topOne(List<T> list) {
         return Objects.isNull(list) || list.isEmpty() ? null : list.get(0);
     }
 

@@ -1,13 +1,12 @@
-package com.zmn.biz.amislc.common.diobase;
+package com.zmn.biz.amislc.common.basedxo.dio;
 
 import com.alibaba.fastjson.JSON;
-import com.zmn.biz.amislc.common.diobase.validate.DioValidator;
+import com.zmn.biz.amislc.common.basedxo.dio.validate.DioValidator;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Objects;

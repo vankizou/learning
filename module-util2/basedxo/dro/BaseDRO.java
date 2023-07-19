@@ -1,4 +1,4 @@
-package com.zmn.biz.amislc.common.drobase;
+package com.zmn.biz.amislc.common.basedxo.dro;
 
 import com.alibaba.fastjson.JSON;
 import lombok.Getter;
