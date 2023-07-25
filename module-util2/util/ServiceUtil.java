@@ -171,7 +171,7 @@ public class ServiceUtil {
      * @author zoufanqi
      * @since 2023/6/6 11:51
      */
-    public static <S, T> List<T> copyBatchProperties(List<S> sources, Class<T> targetCls) {
+    public static <S, T> List<T> copyPropertiesBatch(List<S> sources, Class<T> targetCls) {
         return copyBatchProperties(sources, targetCls, null);
     }
 
@@ -185,7 +185,7 @@ public class ServiceUtil {
      * @author zoufanqi
      * @since 2023/6/6 11:51
      */
-    public static <S, T> List<T> copyBatchProperties(List<S> sources, Class<T> targetCls, BiConsumer<S, T> targetConsumer) {
+    public static <S, T> List<T> copyPropertiesBatch(List<S> sources, Class<T> targetCls, BiConsumer<S, T> targetConsumer) {
         if (CollectionUtil.isEmpty(sources)) {
             return Collections.emptyList();
         }
@@ -276,4 +276,31 @@ public class ServiceUtil {
         );
     }
 
+    public static String cutString(String str, int maxLen) {
+        return cutString(str, maxLen, null);
+    }
+
+    /**
+     * 截串
+     *
+     * @param str    字符串
+     * @param maxLen 最大长度
+     * @param suffix 截串后追加后缀，如：xxx...
+     * @return 截取后的字符串
+     * @author zoufanqi
+     * @since 2023/7/24 09:16
+     */
+    public static String cutString(String str, int maxLen, String suffix) {
+        if (StrUtil.isBlank(str)) {
+            return str;
+        }
+        if (maxLen <= 0) {
+            return "";
+        }
+        if (StrUtil.isBlank(suffix)) {
+            return str.length() > maxLen ? str.substring(0, maxLen) : str;
+        } else {
+            return str.length() > maxLen ? str.substring(0, maxLen - suffix.length()) + suffix : str;
+        }
+    }
 }

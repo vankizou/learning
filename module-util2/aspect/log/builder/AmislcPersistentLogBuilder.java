@@ -5,11 +5,12 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.zmn.biz.amislc.aspect.log.anno.LogPersistent;
+import com.zmn.biz.amislc.aspect.log.builder.common.BasePersistentLogBuilder;
 import com.zmn.biz.amislc.aspect.log.enums.LogEnvTypeEnum;
 import com.zmn.biz.amislc.aspect.log.enums.LogObjTypeEnum;
 import com.zmn.biz.amislc.aspect.log.enums.LogOperateTypeEnum;
-import com.zmn.biz.amislc.aspect.log.builder.common.BasePersistentLogBuilder;
 import com.zmn.biz.amislc.model.entity.AmislcOperateLog;
+import com.zmn.biz.amislc.utils.ServiceUtil;
 import com.zmn.common.dto2.AMISResponseDTO;
 import com.zmn.common.dto2.ResponseDTO;
 
@@ -26,6 +27,10 @@ import java.util.Optional;
  * @since 2023/7/13 13:55
  **/
 public class AmislcPersistentLogBuilder extends BasePersistentLogBuilder<AmislcOperateLog> {
+    private static final int MAX_PARAM_LEN = 500;
+
+    private static final String PARAM_SUFFIX = "...";
+
     private static Integer getAppId(Map<String, Object> inputParamMap) {
         Integer appId = NumberUtil.parseInt(Optional.ofNullable(inputParamMap.get("appId")).orElse("0").toString(), 0);
         // 无直接传递appId参数
@@ -43,7 +48,7 @@ public class AmislcPersistentLogBuilder extends BasePersistentLogBuilder<AmislcO
                 break;
             }
         }
-        return appId;
+        return Optional.ofNullable(appId).orElse(0);
     }
 
     @Override
@@ -71,12 +76,12 @@ public class AmislcPersistentLogBuilder extends BasePersistentLogBuilder<AmislcO
         log.setObjType(objType.getType());
         log.setObjTypeName(objType.getName());
         log.setOperateType(logPersistent.value().getType());
-        log.setOperateParam(convertMapParamToString(inputParamMap));
+        log.setOperateParam(ServiceUtil.cutString(convertMapParamToString(inputParamMap), MAX_PARAM_LEN, PARAM_SUFFIX));
 
         // 填充appId（如果有）
         log.setAppId(getAppId(inputParamMap));
 
-        log.setOperateResult(JSON.toJSONString(outputResult));
+        log.setOperateResult(ServiceUtil.cutString(JSON.toJSONString(outputResult), MAX_PARAM_LEN, PARAM_SUFFIX));
         log.setOperateStatus(isResultSuccess ? 1 : 2);
         log.setCreateTime(LocalDateTime.now());
 
